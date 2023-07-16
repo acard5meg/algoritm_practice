@@ -1,0 +1,30 @@
+# First attempt at quick sort
+# Python implementation
+# Only checked for distinct numbers
+# Sorts in ascending order
+
+# Quick sort
+def partit(arr, start, end):
+    pivot = arr[end-1]
+    l_p = start
+    i = start
+    while i < len(arr[start:end])-1:
+        if arr[i] > pivot:
+            i += 1
+        else:
+            interim = arr[i]
+            arr[i] = arr[l_p]
+            arr[l_p] = interim
+            i += 1
+            l_p += 1
+    arr[end-1] = arr[l_p]
+    arr[l_p] = pivot
+    return l_p
+    
+    
+def quick_sort(arr,start,end):
+    if start < end:
+        partit_point = partit(arr,0,end)    
+        quick_sort(arr,0,partit_point)
+        quick_sort(arr,partit_point+1,end)
+    return arr

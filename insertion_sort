@@ -1,0 +1,16 @@
+# First attempt at insertion sort
+# Only tried on distinct numbers
+
+# Insertion sort
+def insertion_sort(arr):
+    i = 1
+    while i < len(arr):
+        cur_index = i
+        while arr[i] < arr[i-1] and i > 0:
+            interim = arr[i-1]
+            arr[i-1] = arr[i]
+            arr[i] = interim
+            i -= 1
+        i = cur_index
+        i += 1
+    return arr
