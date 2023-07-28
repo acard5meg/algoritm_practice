@@ -1,0 +1,23 @@
+# Binary search, python
+
+def binary_search(arr : list, value : int, answer = 0) -> int:
+
+    if len(arr) == 0:
+
+        return "NOT IN LIST"
+
+    if arr[len(arr) // 2] == value:
+
+        answer += len(arr) // 2
+
+        return answer
+
+    elif arr[len(arr) // 2] > value:
+
+        return binary_search(arr[:len(arr) // 2],value,answer)
+
+    else:
+
+        answer += len(arr) // 2 + 1
+
+        return binary_search(arr[len(arr) // 2 + 1: ],value,answer)
