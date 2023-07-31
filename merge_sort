@@ -1,0 +1,35 @@
+# Merge sort, python
+# O(n log n)
+# Break down array into single elements then sort the single element lists
+# back up until the full aray is sorted
+
+def merge_sort(arr : list):
+    if len(arr) > 1:
+        left = arr[:len(arr)//2]
+        right = arr[len(arr)//2:]
+        merge_sort(left)
+        merge_sort(right)
+        
+        overall_ind = left_ind = right_ind = 0
+        while left_ind < len(left) and right_ind < len(right):
+            if left[left_ind] < right[right_ind]:
+                arr[overall_ind] = left[left_ind]
+                left_ind += 1
+            else:
+                arr[overall_ind] = right[right_ind]
+                right_ind += 1
+            overall_ind += 1
+        
+        while left_ind < len(left):
+            arr[overall_ind] = left[left_ind]
+            left_ind += 1
+            overall_ind += 1
+        while right_ind < len(right):
+            arr[overall_ind] = right[right_ind]
+            right_ind += 1
+            overall_ind += 1
+    return arr
+
+if __name__ == "__main__":
+    print(merge_sort([0,0,5,4,3,2,1]))
+    print(merge_sort([-90, -11, 90, 43, 0, 78]))
