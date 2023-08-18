@@ -1,0 +1,74 @@
+# First attempt at building singly linked list
+# Need to create methods to: 
+# 1. insert node at certain position
+# 2. reverse the list
+
+class SingleLNode():
+    def __init__(self,node_value):
+        self.data = node_value
+        self.next = None
+
+class SingleList():
+    def __init__(self):
+        self.head = None
+        self.tail = None
+        self.list_len = 0
+
+    def insert_node_end(self,node_value):
+        self.list_len += 1
+        node = SingleLNode(node_value)
+
+        if not self.head:
+            self.head = node
+        else:
+            self.tail.next = node
+        self.tail = node
+
+    def insert_node_front(self,node_value):
+        self.list_len += 1
+        node = SingleLNode(node_value)
+        if not self.head:
+            self.head = node
+            self.tail = node
+        else:
+            curr = self.head
+            self.head = node
+            node.next = curr
+
+    def delete_end(self):
+        self.list_len -= 1
+        curr = self.head
+        while curr.next != self.tail:
+            curr = curr.next
+        curr.next = None
+        self.tail.next = None
+        self.tail = curr
+
+    def delete_front(self):
+        self.list_len -= 1
+        self.head = self.head.next
+
+    def __repr__(self):
+        nodes = []
+        self = self.head
+        while self:
+            nodes.append(self.data)
+            self = self.next
+        return ' -> '.join(list(map(str,nodes)))
+
+    def __len__(self):
+        return self.list_len
+    
+if __name__ == "__main__":
+    test = SingleList()
+    test.insert_node_front(1)
+    test.insert_node_end(2)
+    test.insert_node_end(3)
+    test.insert_node_front(0)
+    print(f"{len(test)} \n{test}")
+    test.delete_end()
+    test.delete_front()
+    print(f"{len(test)} \n{test}")
+    test.insert_node_end(123)
+    test.insert_node_front(-1000)
+    print(f"{len(test)} \n{test}")
