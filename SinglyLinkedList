@@ -1,7 +1,4 @@
-# First attempt at building singly linked list
-# Need to create methods to: 
-# 1. insert node at certain position
-# 2. reverse the list
+# Attempt at building a singly linked list
 
 class SingleLNode():
     def __init__(self,node_value):
@@ -9,10 +6,15 @@ class SingleLNode():
         self.next = None
 
 class SingleList():
-    def __init__(self):
+    def __init__(self,iterable=[]):
         self.head = None
         self.tail = None
         self.list_len = 0
+        self.init_list(iterable)
+
+    def init_list(self,iterable):
+        for i in iterable:
+            self.insert_node_end(i)
 
     def insert_node_end(self,node_value):
         self.list_len += 1
@@ -35,6 +37,29 @@ class SingleList():
             self.head = node
             node.next = curr
 
+    def insert_node_position(self,position,node_value):
+        node = SingleLNode(node_value)
+        # protects against empty list
+        if not self.head:
+            return
+
+        if position == 0:
+            curr = self.head
+            self.head = node
+            node.next = curr
+        elif position >= self.list_len:
+            self.tail.next = node
+            self.tail = node
+        else:
+            curr = self.head
+            index = position-1
+            while index>0:
+                curr = curr.next
+                index -= 1
+            node.next = curr.next
+            curr.next = node
+        self.list_len += 1
+
     def delete_end(self):
         self.list_len -= 1
         curr = self.head
@@ -48,6 +73,35 @@ class SingleList():
         self.list_len -= 1
         self.head = self.head.next
 
+    # Reverses the link list and returns a new copy
+    # allows you to keep current structure of list and reverse it   
+    def reverse_return(self):
+        if self.head is None:
+            return
+
+        new_list = SingleList()
+        self = self.head
+        while self:
+            new_list.insert_node_front(self.data)
+            self = self.next
+        return new_list
+    
+    # Reverses the list in place
+    def reverse(self):
+        if self.head is None:
+            return
+        prev = None
+        nextN = None
+        curr = self.head
+        new_tail = self.head
+        while curr:
+            nextN = curr.next
+            curr.next = prev
+            prev = curr
+            curr = nextN
+        self.head = prev
+        self.tail = new_tail
+
     def __repr__(self):
         nodes = []
         self = self.head
@@ -59,16 +113,31 @@ class SingleList():
     def __len__(self):
         return self.list_len
     
-if __name__ == "__main__":
-    test = SingleList()
-    test.insert_node_front(1)
-    test.insert_node_end(2)
-    test.insert_node_end(3)
-    test.insert_node_front(0)
-    print(f"{len(test)} \n{test}")
-    test.delete_end()
-    test.delete_front()
-    print(f"{len(test)} \n{test}")
-    test.insert_node_end(123)
-    test.insert_node_front(-1000)
-    print(f"{len(test)} \n{test}")
+# if __name__ == "__main__":
+#     test1 = SingleList()
+#     test2 = SingleList([1,2,3,4,9,8,7,6])
+    # print(test1)
+    # print(test2)
+    # print(len(test1))
+    # print(len(test2))
+    # using test1 which checks initializing empty list will work
+    # test1.insert_node_end(1)
+    # test1.insert_node_end('a')
+    # test1.insert_node_front(100)
+    # print(test1)
+    # test1.insert_node_position(1,"alex")
+    # test1.delete_end()
+    # test1.delete_front()
+    # should be: alex 1 
+    # print(test1)
+    # print(test1)
+    # test1.reverse()
+    # print(test1)
+    # test1.insert_node_end("end")
+    # test1.insert_node_front(50)
+    # should be 50 a 1 alex 100 end
+    # print(test1)
+    # test1.delete_end()
+    # test1.delete_front()
+    # should be: a 1 alex 100
+    # print(test1)
