@@ -1,7 +1,7 @@
 /**
  * Parameterized Doubly Linked List
  * No action within the linked list
- * Lacking jargon, but acts as a stack
+ * Lacking jargon, but acts as a queue
  * Implement iterator interface
  * @param <E>
  */
