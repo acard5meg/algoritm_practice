@@ -1,0 +1,277 @@
+# Python binary search tree
+# In order, post order, pre order, inorder traversal
+# size, delete, height
+# Created queue w/ functionality limited to en/dequeue for inorder traversal 
+# and balance method
+
+class QNode():
+    def __init__(self,val):
+        self.value = val
+        self.previous = None
+        self.next = None
+
+class Queue():
+    def __init__(self):
+        self.head = None
+        self.tail = None
+        self.len = 0
+
+    def enqueue(self,val):
+        node = QNode(val)
+        if self.head is None:
+            self.head = node
+            self.tail = node
+        else:
+            node.next = self.tail
+            self.tail.previous = node
+            self.tail = self.tail.previous
+        self.len+=1
+
+    def dequeue(self):
+        to_return = None
+        if self.head is not None:
+            to_return = self.head.value
+            if self.head.previous is not None:
+                self.head = self.head.previous
+                self.head.next = None
+            else:
+                self.head = None
+        self.len -= 1
+        return to_return
+
+    def __len__(self):
+        return self.len
+
+    def print_from_tail(self):
+        curr = self.tail
+        while curr is not None:
+            print(curr.value, sep = " ")
+            curr = curr.next
+
+
+class Node():
+    def __init__(self,val):
+        self.value = val
+        self.left = None
+        self.right = None
+
+    def __repr__(self):
+        return str(self.value)
+
+class BinarySearchTree():
+    def __init__(self,iter = []):
+        self.root = None
+        if len(iter)>0:
+            for i in iter:
+                self.add_node(i)
+
+    def add_node(self,val):
+        node = Node(val)
+        if self.root is None:
+            self.root = node
+        else:
+            curr = self.root
+            while True:
+                if val <= curr.value:
+                    if curr.left is None:
+                        curr.left = node
+                        break
+                    else:
+                        curr = curr.left
+                else:
+                    if curr.right is None:
+                        curr.right = node
+                        break
+                    else:
+                        curr = curr.right
+
+    def preorder_traversal(self):
+        self.__preorder_traversal(tree.root)
+
+    def __preorder_traversal(self,val):
+        if val is not None:
+            print(val.value,end=" ")
+        if val.left is not None:
+            self.preorder_traversal(val.left)
+        if val.right is not None:
+            self.preorder_traversal(val.right)
+
+    def inorder_traversal(self):
+        self.__inorder_traversal(tree.root)
+
+    def __inorder_traversal(self,val):
+        if val.left is not None:
+            self.inorder_traversal(val.left)
+        if val is not None:
+            print(val.value,end= " ")
+        if val.right is not None:
+            self.inorder_traversal(val.right)
+
+    def postorder_traversal(self):
+        self.__postorder_traversal(tree.root)
+
+    def __postorder_traversal(self,val):
+        if val.left is not None:
+            self.postorder_traversal(val.left)
+        if val.right is not None:
+            self.postorder_traversal(val.right)
+        if val is not None:
+            print(val.value, end= " ")
+
+    def levelorder_traversal(self):
+        self.__levelorder_traversal(tree.root)
+
+    def __levelorder_traversal(self,val):
+        Q = Queue()
+        Q.enqueue(val)
+        while len(Q) > 0:
+            temp = Q.dequeue()
+            print(temp.value, end=" ")
+            if temp.left is not None:
+                Q.enqueue(temp.left)
+            if temp.right is not None:
+                Q.enqueue(temp.right)
+
+    def size(self):
+        return self.__rec_size(self.root)
+
+    def __rec_size(self,val):
+        if val is None:
+            return 0
+        else:
+            return self.__rec_size(val.left) + self.__rec_size(val.right) + 1
+
+    def delete(self,val):
+        curr = self.root
+        parent = None
+        # 3 cases
+        # 1. delete leaf
+        # 2. delete with one child
+        # 3. delte with two children
+
+        while True:
+            if val == curr.value:
+                children = 0
+                if curr.left is not None:
+                    children+=1
+                if curr.right is not None:
+                    children+=1
+                
+                if children == 0:
+                    if parent.left.value == curr.value:
+                        parent.left = None
+                    else:
+                        parent.right = None
+                elif children == 1:
+                    if curr.left is not None and curr.right is None:
+                        curr.value = curr.left.value
+                        curr.left = None
+                    elif curr.right is not None and curr.left is None:
+                        curr.value = curr.right.value
+                        curr.right = None
+                else:
+                    curr.value = self._find_next_largest(curr)
+                break
+            elif val < curr.value and curr.left is not None:
+                parent = curr
+                curr = curr.left
+            elif val > curr.value and curr.right is not None:
+                parent = curr
+                curr = curr.right
+            else:
+                print("Node is not in tree")
+                break  
+
+    def _find_next_largest(self,node):
+        """
+        Function will be used with the delete function 
+        """
+        curr = node.right
+        parent = node
+        depth = False
+        while True:
+            if curr.left is not None:
+                parent = curr
+                curr = curr.left
+                depth = True
+            else:
+                break
+        if depth:
+            parent.left = None
+        else:
+            parent.right = None
+        return curr.value
+    
+    def height(self):
+        return self.__height(self.root)
+    
+    def __height(self,tree):
+        if tree is None or (tree.left is None and tree.right is None):
+            return 0
+        else:
+            return self.__height(tree.left) + self.__height(tree.right) + 1
+
+    def balance(self):
+        new_tree = BinarySearchTree()
+        inorder_arr = self._inorder_arr()
+        self.root = self._balance(inorder_arr,new_tree,0,len(inorder_arr)-1)
+
+    def _balance(self,arr,tree,start,end):
+        if start == end:
+            tree.add_node(arr[start])
+        elif abs(end-start) == 1:
+            tree.add_node(arr[start])
+            tree.add_node(arr[end])
+        else:
+            middle = (start+end)//2
+            tree.add_node(arr[middle])
+            self._balance(arr,tree,start,middle-1)
+            self._balance(arr,tree,middle+1,end)
+        return tree.root
+
+    def _inorder_arr(self):
+        queue = Queue()
+        queue = self._inorder_q(queue,self.root)
+        arr = []
+        for i in range(len(queue)):
+            arr.append(queue.dequeue())
+        return arr
+
+    def _inorder_q(self,qu,tree):
+        if tree.left is not None:
+            self._inorder_q(qu,tree.left)
+        if tree is not None:
+            qu.enqueue(tree.value)
+        if tree.right is not None:
+            self._inorder_q(qu,tree.right)
+        return qu
+
+
+if __name__ == "__main__":
+    tree = BinarySearchTree([4, 10, 12, 15, 18, 22, 24, 25, 31, 35, 44, 50, 66, 70, 90])
+    tree.levelorder_traversal()
+    tree.balance()
+    print()
+    tree.levelorder_traversal()
+    print()
+
+
+
+
+
+
+    # tree.delete(-1)
+    # print("Level order traversal", end=" ")
+    # print(f"Size of tree: {tree.size(tree.root)}")
+    # print("Pre order traversal" , end=" ")
+    # tree.preorder_traversal(tree.root)
+    # print()
+    # print("In order traversal", end=" ")
+    # tree.inorder_traversal(tree.root)
+    # print()
+    # print("Post order traversal",end = " ")
+    # tree.postorder_traversal(tree.root)
+    # print()
+    # print("Level order traversal", end=" ")
+    # tree.levelorder_traversal(tree.root)
+    # print()
