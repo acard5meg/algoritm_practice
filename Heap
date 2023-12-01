@@ -1,0 +1,92 @@
+# Heap data structure
+
+class Heap:
+    def __init__(self):
+        self.H = []
+        self.length = 0
+
+    def __len__(self):
+        return self.length
+    
+    def __iter__(self):
+        for i in self.H:
+            yield i
+    
+    def enqueue(self,val):
+        self.H.append(val)
+        parent_idx  = (self.length - 1) // 2
+        curr_idx = self.length
+        self._reheap_up(parent_idx,curr_idx)
+
+        self.length+=1
+
+    def _reheap_up(self,p_idx,c_idx):
+        if p_idx >= 0 and self.H[c_idx] > self.H[p_idx]:
+            self.H[c_idx], self.H[p_idx] = self.H[p_idx], self.H[c_idx]
+            self._reheap_up((p_idx-1)//2,p_idx)
+
+    def dequeue(self):
+        if self.length == 0:
+            return
+        
+        to_return = self.H[0]
+
+        if self.length == 1:
+            self.length -= 1
+            self.H.pop()
+            return to_return
+        
+        self.H[0] = self.H.pop()
+        self.length -= 1
+        self._reheap_down(0,1,2) # 1 is left child of root and 2 is right child of root
+        return to_return
+
+    def _reheap_down(self,parent,left,right):
+        if right < self.length and (self.H[parent] < self.H[left] or self.H[parent] < self.H[right]):
+            if self.H[parent] < self.H[left] and self.H[parent] < self.H[right]:
+                if self.H[left] >= self.H[right]:
+                    self.H[parent], self.H[left] = self.H[left], self.H[parent]
+                    self._reheap_down(left,left*2+1,left*2+2)
+                else:
+                    self.H[parent], self.H[right] = self.H[right], self.H[parent]
+                    self._reheap_down(right,right*2+1,right*2+2)
+            elif self.H[parent] < self.H[left]:
+                self.H[parent], self.H[left] = self.H[left], self.H[parent]
+                self._reheap_down(left,left*2+1,left*2+2)
+            else:
+                self.H[parent], self.H[right] = self.H[right], self.H[parent]
+                self._reheap_down(right,right*2+1,right*2+2)
+        elif left < self.length and self.H[parent] < self.H[left]:
+            self.H[parent], self.H[left] = self.H[left], self.H[parent]
+            self._reheap_down(left,left*2+1,left*2+2)
+        else:
+            return
+
+
+    def display(self):
+        for i in self.H:
+            print(i)
+
+
+if __name__ == "__main__":
+    h = Heap()
+    h.dequeue()
+    h.enqueue(10)
+    h.enqueue(8)
+    h.enqueue(9)
+    h.enqueue(4)
+    h.enqueue(7)
+    h.enqueue(6)
+    h.enqueue(1)
+    h.enqueue(2)
+    h.enqueue(3)
+    h.enqueue(5)
+    print(f"Top value: {h.dequeue()}")
+    print(f"Top value: {h.dequeue()}")
+    print(f"Top value: {h.dequeue()}")
+    print(f"Top value: {h.dequeue()}")
+    print(f"Top value: {h.dequeue()}")
+    print(f"Top value: {h.dequeue()}")
+    h.enqueue(10)
+    h.display()
+    print(f"Length: {len(h)}")
