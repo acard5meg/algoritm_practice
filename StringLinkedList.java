@@ -83,6 +83,22 @@ public class StringLinkedList {
 		return length;
 	}
 	
+	public void reverseInPlace() {
+		StringNode curr, prev, nxt;
+		curr = head;
+		nxt = head;
+		prev = null;
+		
+		while (curr != null) {
+			nxt = nxt.next;
+			curr.next = prev;
+			prev = curr;
+			curr = nxt;
+		}
+		
+		head = prev;
+	}
+	
 	
 	private class StringNode {
 		private String data;
@@ -103,13 +119,15 @@ public class StringLinkedList {
 		StringLinkedList test = new StringLinkedList();
 		test.addFront("dog");
 		test.addEnd("fish");
-		test.deleteEnd();
+//		test.deleteEnd();
 		test.addEnd("horse");
-		test.deleteFront();
-		test.deleteEnd();
+//		test.deleteFront();
+//		test.deleteEnd();
 		test.addFront("cow");
 		test.addEnd("bird");
 		test.addFront("monkey");
+		test.printList();
+		test.reverseInPlace();
 		test.printList();
 	}
 }
