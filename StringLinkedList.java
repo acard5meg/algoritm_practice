@@ -1,5 +1,4 @@
 /**
- * This answers Execise #10 p.905
  * This is an example of a singly linked String list
  */
 
@@ -104,14 +103,13 @@ public class StringLinkedList {
 		private String data;
 		private StringNode next;
 		
-		public StringNode() {
-			data = null;
-			next = null;
-		}
-		
 		public StringNode(String strData, StringNode nodeNext) {
 			data = strData;
 			next = nodeNext;
+		}
+		
+		public StringNode() {
+			this(null, null);
 		}
 	}
 	

@@ -1,28 +1,24 @@
 /**
  * Parameterized Doubly Linked List
  * No action within the linked list
- * Lacking jargon, but acts as a queue
  * Implement iterator interface
  * @param <E>
  */
 public class ParamDLinkList <E> {
-
 	
 	private class Node {
 		private E data;
 		private Node next;
 		private Node prev;
 		
-		public Node() {
-			data = null;
-			next = null;
-			prev = null;
-		}
-		
 		public Node(E inpData, Node inpNext, Node inpPrev) {
 			data = inpData;
 			next = inpNext;
 			prev = inpPrev;
+		}
+		
+		public Node() {
+			this(null,null,null);
 		}
 	}
 	
@@ -76,7 +72,7 @@ public class ParamDLinkList <E> {
 			System.out.println(curr.data);
 		}
 	}
-	
+
 	public void deleteFromHead() {
 		if (head != null) {
 			if (head == tail) {
@@ -119,7 +115,7 @@ public class ParamDLinkList <E> {
 //		test.printFromFront();
 		test.addToEnd("L");
 		test.addToFront("W");
-//		test.printFromFront();
 		test.printFromTail();
+//		test.printFromTail();
 	}
 }
